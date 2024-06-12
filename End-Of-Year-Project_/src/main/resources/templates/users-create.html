@@ -33,25 +33,16 @@
                </div>
            </div>
            <div class="form-group">
-               <label for="name">name</label>
+               <label for="username">username</label>
                <input
                        type="text"
                        class="form-control"
-                       name="name"
-                       th:field="*{name}"
-                       id="name" >
-               <p th:if="${#fields.allErrors()}" class="text-danger" th:errors="*{name}"></p>-->
+                       name="username"
+                       th:field="*{username}"
+                       id="username" >
+               <p th:if="${#fields.allErrors()}" class="text-danger" th:errors="*{username}"></p>-->
            </div>
-           <div class="form-group">
-               <label for="lastName">last Name</label>
-               <input
-                       type="text"
-                       class="form-control"
-                       name="lastName"
-                       th:field="*{lastName}"
-                       id="lastName" >
-               <p th:if="${#fields.allErrors()}" class="text-danger" th:errors="*{lastName}"></p>-->
-           </div>
+
            <div class="form-row">
                <div class="form-group col-md-6">
                    <label for="poste">poste</label>

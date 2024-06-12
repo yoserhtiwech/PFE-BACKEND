@@ -34,8 +34,8 @@ public class ContactController {
         return "contact-detail";
 
     }
-    @GetMapping("/contact/new")
-    public String CreatecontactForm(Model model){
+    @GetMapping("/contacts/new")
+    public String CreateContactForm(Model model){
         Contacts contact= new Contacts();
         model.addAttribute("contact",contact);
         return"contacts-create";
@@ -45,21 +45,21 @@ public class ContactController {
         contactService.delete(contactId);
         return "redirect:/contacts";
     }
-    @GetMapping("/contacts/{contactId}/edit")
-    public String editContactForm(@PathVariable("contactId") long contactId,Model model){
-        ContactDto contact= contactService.findContactById(contactId);
-        model.addAttribute("contact",contact);
-        return "contacts-edit";
-    }
+    //@GetMapping("/contacts/{contactId}/edit")
+  //  public String editContactForm(@PathVariable("contactId") long contactId,Model model){
+      //  ContactDto contact= contactService.findContactById(contactId);
+       // model.addAttribute("contact",contact);
+       // return "contacts-edit";
+  //  }
 
-    @PostMapping("/contacts/{contactId}/edit")
-    public String updateContact(@PathVariable("contactId") long contactId,
-                             @Valid @ModelAttribute("contact") ContactDto contact , BindingResult result){
-        if(result.hasErrors()){
-            return "contacts-edit";
-        }
-        contact.setId(contactId);
-        contactService.updateContact(contact);
-        return "redirect:/contacts";
-    }
+    //@PostMapping("/contacts/{contactId}/edit")
+   // public String updateContact(@PathVariable("contactId") long contactId,
+                            // @Valid @ModelAttribute("contact") ContactDto contact , BindingResult result){
+     //   if(result.hasErrors()){
+       //     return "contacts-edit";
+      //  }
+      //  contact.setId(contactId);
+      //  contactService.updateContact(contact);
+       // return "redirect:/contacts";
+   // }
 }

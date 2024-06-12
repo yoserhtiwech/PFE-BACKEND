@@ -25,9 +25,9 @@
             <img class="img-fluid rounded-3 mb-3" th:src="${contact.num}" alt="..." />
             <a  th:text="${contact.address}" class="h3 fw-bolder text-decoration-none link-dark stretched-link" href="#!">Project name</a>
           </div>
-          <a class="btn btn-primary" th:href="@{/contact/{contactId}(contactId=${contact.id})}"> VIEW</a>
+          <a class="btn btn-primary" th:href="@{/contacts/{contactId}(contactId=${contact.id})}"> VIEW</a>
 
-          <a class="btn btn-primary" th:href="@{/contact/{contactId}/(contactId=${contact.id})}"> EDIT</a>
+          <a class="btn btn-primary" th:href="@{/contacts/{contactId}/(contactId=${contact.id})}"> EDIT</a>
 
         </div>
 

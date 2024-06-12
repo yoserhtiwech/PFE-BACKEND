@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContactRepository extends JpaRepository<Contacts,Long> {
-    Optional<Contacts> findByNum(long number);
+    Optional<Contacts> findByNum(String number);
 
     @Query("SELECT c from Contacts c WHERE CAST(c.num AS string) LIKE CONCAT('%', :query, '%')")
     List<Contacts> searchClubs(String query);

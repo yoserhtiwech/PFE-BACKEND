@@ -20,7 +20,7 @@ public class Contacts {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "contact_seq")
     @SequenceGenerator(name = "contact_seq", sequenceName = "contact_seq", allocationSize = 1)
     public long id ;
-    public long num;
+    public String num;
     public String username;
     public String address;
     @ManyToOne

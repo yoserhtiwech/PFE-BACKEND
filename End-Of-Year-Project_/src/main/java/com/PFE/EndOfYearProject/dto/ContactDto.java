@@ -10,9 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ContactDto {
-    public long id ;
+    public long id;
     @NotEmpty
-    public long num;
+    public String num;
     @NotEmpty
     public String username;
     @NotEmpty

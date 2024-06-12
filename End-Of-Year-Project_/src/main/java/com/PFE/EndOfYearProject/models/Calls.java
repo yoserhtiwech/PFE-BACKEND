@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name ="APPEL")
-public class Appels {
+public class Calls {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appel_seq")
     @SequenceGenerator(name = "appel_seq", sequenceName = "appel_seq", allocationSize = 1)

@@ -10,7 +10,6 @@ public class ContactMapper {
                 .num(contactDto.getNum())
                 .address(contactDto.getAddress())
                 .username(contactDto.getUsername())
-
                 .build();
         return contact;
     }
