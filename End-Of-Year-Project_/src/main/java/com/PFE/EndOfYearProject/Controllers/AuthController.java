@@ -1,35 +1,37 @@
 package com.PFE.EndOfYearProject.Controllers;
 
 import com.PFE.EndOfYearProject.Services.UserService;
+import com.PFE.EndOfYearProject.dto.AuthenticationDto;
 import com.PFE.EndOfYearProject.dto.UserDto;
 import com.PFE.EndOfYearProject.models.Users;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/Auth")
+
 public class AuthController {
     private UserService userService;
 
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-    @GetMapping("/login")
-    public String loginPage(){
-        return "login";
-    }
-    @GetMapping("/register")
-    public String getRegisterForm(Model model){
-        UserDto user= new UserDto();
-        model.addAttribute("user",user);
-        return "register";
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@RequestBody @Valid AuthenticationDto request) {
 
+     return  ResponseEntity.ok(userService.login(request));
     }
-    @PostMapping("/register/save")
+
+
+    /*@PostMapping("/register/save")
     public String register(@Valid @ModelAttribute("user")UserDto user,
                            BindingResult result, Model model) {
         Users existingUserEmail = userService.findByEmail(user.getEmail());
@@ -48,5 +50,5 @@ public class AuthController {
         }
         userService.saveUser(user);
         return "redirect:/users?success";
-    }
-}//hello
+    }*/
+}

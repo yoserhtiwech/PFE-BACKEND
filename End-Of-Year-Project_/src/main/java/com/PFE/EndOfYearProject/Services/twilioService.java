@@ -5,7 +5,10 @@ import com.PFE.EndOfYearProject.dto.SMSDto;
 
 public interface twilioService {
     public void sendSms(SMSDto smsDto);
-
-
+    public void sendNotification(SMSDto smsDto);
+    public void recieveSms(SMSDto smsDto);
+    public void recordcall(CallsDto callsDto);
     public void makeCall(CallsDto callsDto);
+    public void recieveCall(CallsDto callsDto);
+
 }

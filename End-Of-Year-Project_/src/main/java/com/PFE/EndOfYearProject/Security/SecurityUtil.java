@@ -1,4 +1,4 @@
-package com.PFE.EndOfYearProject.Security;
+/*package com.PFE.EndOfYearProject.Security;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,4 +17,4 @@ public class SecurityUtil {
         }
         return null;
     }
-}
+}*/
