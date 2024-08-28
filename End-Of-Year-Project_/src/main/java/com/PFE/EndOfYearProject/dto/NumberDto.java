@@ -1,21 +1,18 @@
 package com.PFE.EndOfYearProject.dto;
 
+import com.PFE.EndOfYearProject.models.Users;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class NumberDto {
-    private long id;
-    @NotEmpty(message = "Number should not be empty ")
-    private long num;
-    @NotEmpty(message = "Country should not be empty ")
-    private String country;
-    @NotEmpty(message = "Region should not be empty ")
-    private String region;
-    @NotEmpty(message = "Adress should not be empty ")
-    private String address;
-    @NotEmpty(message = "Type should not be empty ")
-    private String type;
+    private Integer id;
+    private Integer num;
+    private UserDto user;
 }

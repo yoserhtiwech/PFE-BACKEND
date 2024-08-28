@@ -3,18 +3,18 @@ import com.PFE.EndOfYearProject.Services.ContactService;
 import com.PFE.EndOfYearProject.dto.ContactDto;
 import com.PFE.EndOfYearProject.models.Contacts;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/Contact")
+@RequiredArgsConstructor
 public class ContactController {
     private ContactService contactService;
     @Autowired
@@ -45,21 +45,5 @@ public class ContactController {
         contactService.delete(contactId);
         return "redirect:/contacts";
     }
-    //@GetMapping("/contacts/{contactId}/edit")
-  //  public String editContactForm(@PathVariable("contactId") long contactId,Model model){
-      //  ContactDto contact= contactService.findContactById(contactId);
-       // model.addAttribute("contact",contact);
-       // return "contacts-edit";
-  //  }
 
-    //@PostMapping("/contacts/{contactId}/edit")
-   // public String updateContact(@PathVariable("contactId") long contactId,
-                            // @Valid @ModelAttribute("contact") ContactDto contact , BindingResult result){
-     //   if(result.hasErrors()){
-       //     return "contacts-edit";
-      //  }
-      //  contact.setId(contactId);
-      //  contactService.updateContact(contact);
-       // return "redirect:/contacts";
-   // }
 }

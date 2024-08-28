@@ -1,26 +1,38 @@
 package com.PFE.EndOfYearProject.Services;
 
+import com.PFE.EndOfYearProject.RequestResponse.UserRequest;
+import com.PFE.EndOfYearProject.dto.AuthenticationResponse;
 import com.PFE.EndOfYearProject.dto.UserDto;
+import com.PFE.EndOfYearProject.models.CompleteRegistrationRequest;
+import com.PFE.EndOfYearProject.models.RegistrationRequest;
 import com.PFE.EndOfYearProject.models.Users;
 import com.PFE.EndOfYearProject.dto.AuthenticationDto;
+import jakarta.mail.MessagingException;
+import com.PFE.EndOfYearProject.RequestResponse.UserUpdateRequest;
+import org.springframework.security.core.Authentication;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
-    // UserDto login(UserDto dto) ;
-    UserDto login(AuthenticationDto request);
-    Optional<Users> findByEmail(String email);
-    Users findByLastName(String lastname);
-    void saveUser(UserDto userDto);
+    AuthenticationResponse login(AuthenticationDto request);
+   void completeRegistration(CompleteRegistrationRequest request);
+    String generateAndSaveActivationToken(Users user);
+   void register(RegistrationRequest request) throws MessagingException;
+   void activateAccount(String token) throws MessagingException;
+
     List<UserDto> findAllUsers();
 
-   // Users saveUser(UserDto userDto);
+    UserDto getUserDetailsForToken(String token);
 
-    UserDto findUseById(long userId );
+    List<UserDto> findGroupeUsers();
+     Integer createUser(UserRequest userDto) ;
 
-    void updateUser(UserDto user);
 
-    void delete(long userId);
+    Integer updateUser(Authentication authentication, UserUpdateRequest userUpdateRequest);
 
-    List<UserDto> searchUsers(String query);
+    Integer adduser(UserRequest userRequest);
+
+    void removeMemberFromGroup(Integer id);
+
+    UserDto findUser(Integer userId);
 }

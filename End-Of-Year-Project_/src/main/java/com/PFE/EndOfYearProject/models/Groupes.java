@@ -18,10 +18,9 @@ public class Groupes {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groupes_seq")
     @SequenceGenerator(name = "groupes_seq", sequenceName = "groupes_seq", allocationSize = 1)
-    private  long id ;
+    private  Integer id ;
     private String name;
-    private long superv;
-    @ManyToMany(mappedBy = "groups")
+    @OneToMany(mappedBy = "groups",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Users> users;
 
 

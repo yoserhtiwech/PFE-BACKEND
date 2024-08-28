@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,11 @@ import java.util.stream.Collectors;
 @Builder
 @Entity
 @Table(name ="USERS")
+@EntityListeners(AuditingEntityListener.class)
 public class Users  implements UserDetails, Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id ;
+    private Integer id ;
     private String fullname;
     @Column(unique = true)
     private String email;
@@ -37,28 +39,25 @@ public class Users  implements UserDetails, Principal {
     private boolean enabled;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Contacts> contacts = new ArrayList<>();
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Numbers> numbers = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Numbers number;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SMS> sms = new ArrayList<>();
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Calls> appels = new ArrayList<>();
-
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "USERS_ROLES",
-            joinColumns = {@JoinColumn(name = "user_id" ,referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "ID")})
-
-
-    private List<roles> roles= new ArrayList<>();
-    @ManyToMany
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private roles role;
+    /*@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(
             name = "USERS_GROUPES",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "group_id",referencedColumnName = "ID")
     )
-    private List<Groupes> groups= new ArrayList<>();
+    private List<Groupes> groups= new ArrayList<>();*/
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id") // This will be the foreign key in the User table
+    private Groupes groups;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
@@ -70,10 +69,11 @@ public class Users  implements UserDetails, Principal {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles
-                .stream()
-                .map(r -> new SimpleGrantedAuthority(r.getName()))
-                .collect(Collectors.toList());
+        if (this.role != null) {
+            return List.of(new SimpleGrantedAuthority(this.role.getName()));
+        } else {
+            return List.of();
+        }
     }
 
     @Override

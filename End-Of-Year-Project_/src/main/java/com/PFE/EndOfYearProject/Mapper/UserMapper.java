@@ -6,24 +6,25 @@ import com.PFE.EndOfYearProject.models.Users;
 public class UserMapper {
 
     public static Users mapToUser(UserDto user) {
-        Users userDto= Users.builder()
+        return Users.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .fullname(user.getFullname())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .poste(user.getPoste())
                 .build();
-        return userDto;
     }
 
     public static UserDto mapToUserDto(Users user) {
-        UserDto userDto = UserDto.builder()
+        return UserDto.builder()
                 .id(user.getId())
-                .username(user.getUsername())
+                .fullname(user.getFullName())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .poste(user.getPoste())
+                .roles(user.getRole().getName())
+                .numbers(user.getNumber().getNum())
+                .groupe(user.getGroups().getName())
                 .build();
-        return userDto;
     }
     }

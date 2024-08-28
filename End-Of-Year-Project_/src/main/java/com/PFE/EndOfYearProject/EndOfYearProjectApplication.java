@@ -3,24 +3,34 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 //import org.springframework.boot.SpringApplication;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Call;
+//import com.twilio.rest.lookups.v1.PhoneNumber;
+import com.twilio.rest.api.v2010.account.Message;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.twilio.Twilio;
+//import com.twilio.Twilio;
 //import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
-import com.twilio.rest.api.v2010.account.Call;
+//import com.twilio.rest.api.v2010.account.Call;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 //import com.twilio.type.Twiml;
 @SpringBootApplication
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class EndOfYearProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EndOfYearProjectApplication.class, args);}
-@Bean
+
+}
+/*@Bean
 public CorsFilter corsFilter() {
 	CorsConfiguration corsConfiguration = new CorsConfiguration();
 	corsConfiguration.setAllowCredentials(true);
@@ -34,28 +44,18 @@ public CorsFilter corsFilter() {
 	UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 	urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 	return new CorsFilter(urlBasedCorsConfigurationSource);
-}}
+}}*/
 	// Find your Account SID and Auth Token at twilio.com/console
 	// and set the environment variables. See http://twil.io/secure
 	//public static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
 	//public static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
 
-	///public static void main(String[] args) {Twilio.init("ACf6bff304d69310a7cd68a1ff6079b223", "e7ec745df7cee6c309d15ad6026797d1");Message message = Message.creator(					new com.twilio.type.PhoneNumber("+21699725005"), new com.twilio.type.PhoneNumber("+12514281224"),						"Where's Wallace?").create();System.out.println(message.getSid());}
-	/*
-		 Install the Java helper library from twilio.com/docs/java/install
-		 Find your Account SID and Auth Token at twilio.com/console
-		 and set the environment variables. See http://twil.io/secure
-		public static void main(String[] args) throws URISyntaxException {
-			Twilio.init("ACf6bff304d69310a7cd68a1ff6079b223", "e7ec745df7cee6c309d15ad6026797d1");
-			Call call = Call.creator(
-							new PhoneNumber("+21699725005"),
-							new PhoneNumber("+12514281224"),
-							new URI("https://demo.twilio.com/docs/voice.xml"))
-					.create();
-			System.out.println(call.getStatus());
-		}
-		}
-		*/
+	//public static void main(String[] args) {Twilio.init("ACf6bff304d69310a7cd68a1ff6079b223", "e7ec745df7cee6c309d15ad6026797d1");Message message = Message.creator(					new com.twilio.type.PhoneNumber("+21699725005"), new com.twilio.type.PhoneNumber("+12514281224"),						"Where's Wallace?").create();System.out.println(message.getSid());}
+
+
+
+
+
 
 
 

@@ -1,54 +1,50 @@
 package com.PFE.EndOfYearProject.Controllers;
-
 import com.PFE.EndOfYearProject.Services.UserService;
 import com.PFE.EndOfYearProject.dto.AuthenticationDto;
+import com.PFE.EndOfYearProject.dto.AuthenticationResponse;
 import com.PFE.EndOfYearProject.dto.UserDto;
-import com.PFE.EndOfYearProject.models.Users;
+import com.PFE.EndOfYearProject.models.CompleteRegistrationRequest;
+import com.PFE.EndOfYearProject.models.RegistrationRequest;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.List;
-
-@Controller
+@RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/Auth")
-
+@RequiredArgsConstructor
 public class AuthController {
-    private UserService userService;
-
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody @Valid AuthenticationDto request) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid AuthenticationDto request) {
 
-     return  ResponseEntity.ok(userService.login(request));
+     return ResponseEntity.ok(userService.login(request));
+
+    }
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
+        userService.register(request);
+        return ResponseEntity.accepted().build();
+    }
+    @PostMapping("/complete-registration")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> completeRegistration(@RequestBody @Valid CompleteRegistrationRequest request) {
+        userService.completeRegistration(request);
+        return ResponseEntity.ok("Registration completed successfully");
+    }
+    @GetMapping("/activate-account")
+    public void confirm(@RequestParam String token) throws MessagingException {
+        userService.activateAccount(token);
+    }
+    @GetMapping("/user-details")
+    public ResponseEntity<UserDto> getUserDetails(@RequestParam String token) {
+        UserDto userDto = userService.getUserDetailsForToken(token);
+        return ResponseEntity.ok(userDto);
     }
 
 
-    /*@PostMapping("/register/save")
-    public String register(@Valid @ModelAttribute("user")UserDto user,
-                           BindingResult result, Model model) {
-        Users existingUserEmail = userService.findByEmail(user.getEmail());
-        if(existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
-           // result.rejectValue("email","there is already a user with this email/username");
-            return "redirect:/register?fail";
-        }
-        Users existingUserLastname = userService.findByLastName(user.getUsername());
-        if(existingUserLastname != null && existingUserLastname.getUsername() != null && !existingUserLastname.getUsername().isEmpty()) {
-            //result.rejectValue("email","there is already a user with this email/username");
-            return "redirect:/register?fail";
-        }
-        if(result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register";
-        }
-        userService.saveUser(user);
-        return "redirect:/users?success";
-    }*/
 }

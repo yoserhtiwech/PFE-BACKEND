@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users,Long> {
+public interface UserRepository extends JpaRepository<Users,Integer> {
    //  Optional<Users> findByName(String url);
      Optional<Users> findByEmail(String email);
-     Users findByUsername(String username);
+    Optional<Users> findById(Integer id);
+    // Users findByUsername(String username);
 
-     @Query("SELECT u FROM Users u WHERE u.username LIKE CONCAT('%', :query, '%')")
+     @Query("SELECT u FROM Users u WHERE u.fullname LIKE CONCAT('%', :query, '%')")
      List<Users> searchUsers(String query);
 
-    Users findFirstByUsername(String username);
+   // Users findFirstByUsername(String username);
 }

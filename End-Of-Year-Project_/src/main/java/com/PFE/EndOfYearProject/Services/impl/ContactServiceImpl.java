@@ -15,7 +15,7 @@ import static com.PFE.EndOfYearProject.Mapper.ContactMapper.mapToContactDto;
 
 @Service
 public class ContactServiceImpl implements ContactService {
-    private ContactRepository contactRepository;
+    private final ContactRepository contactRepository;
     private UserRepository userRepository;
 
     public ContactServiceImpl(ContactRepository contactRepository, UserRepository userRepository) {

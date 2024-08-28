@@ -1,10 +1,20 @@
 package com.PFE.EndOfYearProject.Controllers;
 
+import com.PFE.EndOfYearProject.RequestResponse.UserRequest;
+import com.PFE.EndOfYearProject.RequestResponse.UserUpdateRequest;
+import com.PFE.EndOfYearProject.Security.JwtService;
 import com.PFE.EndOfYearProject.Services.UserService;
+import com.PFE.EndOfYearProject.dto.NumberDto;
 import com.PFE.EndOfYearProject.dto.UserDto;
+import com.PFE.EndOfYearProject.exception.InvalidPasswordException;
 import com.PFE.EndOfYearProject.models.Users;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,74 +22,53 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+
+@RestController
+@RequestMapping("/User")
+@RequiredArgsConstructor
 public class UserController {
-    private UserService userService;
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    private final UserService userService;
+    private JwtService jwtService;
+    @GetMapping("/usersList")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> Users = userService.findAllUsers();
+        return ResponseEntity.ok(Users);
     }
-
-    @GetMapping("/users")
-    public String listusers(Model model){
-        List<UserDto> users = userService.findAllUsers();
-        model.addAttribute("users",users);
-        return "users-list";
+    @GetMapping("/groupeuser")
+    public ResponseEntity<List<UserDto>> getGroupeUsers() {
+        List<UserDto> Users = userService.findGroupeUsers();
+        return ResponseEntity.ok(Users);
     }
-
-    @GetMapping("/users/{userId}")
-    public String userDetail(@PathVariable("userId") long userId,Model model){
-        UserDto userDto =userService.findUseById(userId);
-        model.addAttribute("user",userDto);
-        return "users-detail";
-
-    }
-
-    @GetMapping("/users/new")
-    public String CreateUserForm(Model model){
-        Users user= new Users();
-        model.addAttribute("user",user);
-        return"users-create";
-    }
-
-    @GetMapping("/users/{userId}/delete")
-    public String deleteUser(@PathVariable("userId") long userId){
-        userService.delete(userId);
-        return "redirect:/users";
-    }
-
-    @GetMapping("/users/search")
-    public String searchUser(@RequestParam(value = "query") String query,Model model){
-        List<UserDto> users = userService.searchUsers(query);
-        model.addAttribute("users",users);
-        return "users-list";
-    }
-
-   // @PostMapping("/users/new")
-   // public String SaveUser(@Valid @ModelAttribute("user")UserDto userDto,BindingResult result,Model model ){
-
-     //  if(result.hasErrors()){
-       //    model.addAttribute("user",userDto);
-         //  return "users-create";
-       //} userService.saveUser(userDto);
-        //return "redirect:/users";
-    //}
-
-    @GetMapping("/users/{userId}/edit")
-    public String editUserForm(@PathVariable("userId") long userId,Model model){
-        UserDto user= userService.findUseById(userId);
-        model.addAttribute("user",user);
-        return "users-edit";
-    }
-
-    @PostMapping("/users/{userId}/edit")
-    public String updateUser(@PathVariable("userId") long userId,
-                             @Valid @ModelAttribute("user") UserDto user , BindingResult result){
-        if(result.hasErrors()){
-            return "users-edit";
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateConnectedUser(@RequestBody UserUpdateRequest updateUserRequest, Authentication authentication) {
+        try {
+        Integer updatedUser = userService.updateUser(authentication, updateUserRequest);
+        return ResponseEntity.ok(updatedUser);
+        } catch (InvalidPasswordException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        user.setId(userId);
-        userService.updateUser(user);
-        return "redirect:/users";
     }
+    @PostMapping("add-user")
+    public ResponseEntity<Integer> adduser(@RequestBody UserRequest userRequest ) {
+        return ResponseEntity.ok(userService.adduser(userRequest));
+
+    }
+    @PostMapping("/create-user")
+    public ResponseEntity<Integer> create(@RequestBody UserRequest userRequest ) {
+        return ResponseEntity.ok(userService.createUser(userRequest));
+
+    }
+    @DeleteMapping("/remove-member/{memberId}")
+    public ResponseEntity<String> removeMember(@PathVariable("memberId") Integer Id) {
+        userService.removeMemberFromGroup(Id);
+        return ResponseEntity.ok("Member removed successfully.");
+    }
+    @GetMapping("/findUser/{userId}")
+    public ResponseEntity<UserDto>getUser(@PathVariable("userId") Integer userId) {
+        UserDto User = userService.findUser(userId);
+        return ResponseEntity.ok(User);
+    }
+
+
+
 }

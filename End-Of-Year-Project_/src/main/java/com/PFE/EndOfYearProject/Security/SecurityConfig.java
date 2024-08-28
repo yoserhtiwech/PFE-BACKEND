@@ -1,6 +1,5 @@
-
 package com.PFE.EndOfYearProject.Security;
-import com.PFE.EndOfYearProject.Security.JwtFilter;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+//import javax.servlet.Filter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -29,27 +31,26 @@ public class SecurityConfig {
         http
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers(
-                                        "/auth/**",
-                                        "/v2/api-docs",
-                                        "/v3/api-docs",
-                                        "/v3/api-docs/**",
-                                        "/swagger-resources",
-                                        "/swagger-resources/**",
-                                        "/configuration/ui",
-                                        "/configuration/security",
-                                        "/swagger-ui/**",
-                                        "/webjars/**",
-                                        "/swagger-ui.html"
-                                )
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers(new AntPathRequestMatcher("/User/**"),
+                                new AntPathRequestMatcher("/Group/**"),
+                                new AntPathRequestMatcher("/Number/**"),
+                                new AntPathRequestMatcher("/Calls/**"),
+                                new AntPathRequestMatcher("/Contact/**"),
+                                new AntPathRequestMatcher("/SMS/**"),
+                               new AntPathRequestMatcher("/Auth/**") ,
+                                new AntPathRequestMatcher("/Role/**"),
+                                new AntPathRequestMatcher("onlineUsers"),
+                                new AntPathRequestMatcher("/ws/**")
+                        ).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/api/supervisor/**")).hasRole("SUPERVISOR")
+                        .requestMatchers(new AntPathRequestMatcher("/api/user/**")).hasRole("USER")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

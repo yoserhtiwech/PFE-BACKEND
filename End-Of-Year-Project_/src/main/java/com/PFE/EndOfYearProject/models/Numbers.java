@@ -16,14 +16,14 @@ public class Numbers {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "number_seq")
     @SequenceGenerator(name = "number_seq", sequenceName = "number_seq", allocationSize = 1)
-    private long id;
-    private long num;
+    private Integer id;
+    private Integer num;
     private String country;
     private String region;
     private String address;
     private String type;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
 
 }
